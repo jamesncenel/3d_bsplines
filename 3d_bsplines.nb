@@ -1,0 +1,1015 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     40152,       1007]
+NotebookOptionsPosition[     39384,        988]
+NotebookOutlinePosition[     39812,       1005]
+CellTagsIndexPosition[     39769,       1002]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["\<\
+James Lord Ender Laing
+Dr. Hansford
+CSE 477
+HW #4: Bspline Curve Pretzel\
+\>", "Text",
+ CellChangeTimes->{{3.81455992327971*^9, 3.814559945118889*^9}, {
+  3.814645706370137*^9, 
+  3.814645711072953*^9}},ExpressionUUID->"81fc5d7e-46bf-4a38-bf2d-\
+bd66dc51866c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Set", " ", "#1"}], ":", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"C", "^", "2"}], " ", "Cubic", " ", "B"}], "-", "splines"}]}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"kSet1", " ", "=", " ", "12"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Number", " ", "of", " ", "knots"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"n", " ", "=", " ", "3"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Degree", " ", "3"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"llSet1", " ", "=", " ", "7"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Check", " ", 
+     RowBox[{"paper", "/", "number"}], " ", "of", " ", "polynomial", " ", 
+     "segments"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorCountSet1", " ", "=", " ", 
+     RowBox[{"kSet1", " ", "-", " ", "n", " ", "+", " ", "1"}]}], ";"}], " ", 
+   
+   RowBox[{"(*", 
+    RowBox[{
+    "Number", " ", "of", " ", "Deboor", " ", "points", " ", "needed"}], 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorCountSet1Dec", " ", "=", " ", 
+     RowBox[{"deboorCountSet1", " ", "-", " ", "1"}]}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+     "Number", " ", "of", " ", "Deboor", " ", "points", " ", "needed"}], " ", 
+     "-", 
+     RowBox[{
+     "1.", " ", "Used", " ", "for", " ", "looping", " ", "purposes"}]}], 
+    "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"First", " ", "set", " ", "of", " ", "Deboor", " ", "points"}], 
+    "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorPointsSet1", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"1.5", ",", " ", "0", ",", " ", 
+         RowBox[{"-", "1"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"3.5", ",", " ", "2", ",", " ", 
+         RowBox[{"-", "2"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"3.5", ",", " ", "5", ",", " ", 
+         RowBox[{"-", "2"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"1.5", ",", " ", "5", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2.85", ",", " ", "1.75", ",", " ", "2"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"5.85", ",", " ", "1.75", ",", " ", "1.95"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"5.5", ",", " ", "6.25", ",", " ", "1.5"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "6", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Uniform", " ", "Knots"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"knotVector1", "=", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{"0", ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", "n"}], "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"i", "/", "llSet1"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"llSet1", "-", "1"}]}], "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", "n"}], "}"}]}], "]"}]}], "]"}], "//", 
+      "N"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"knotLength1", " ", "=", " ", 
+     RowBox[{"Length", "[", "knotVector1", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"curve", " ", "evaluation", " ", "method"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"curve", "[", 
+      RowBox[{
+      "t_", ",", " ", "n_", ",", " ", "knot_", ",", " ", "deboorPoints_", ",",
+        " ", "numDeboor_"}], "]"}], ":=", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"BSplineBasis", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"n", ",", "knot"}], "}"}], ",", "i", ",", "t"}], "]"}], 
+        "*", 
+        RowBox[{"deboorPoints", "[", 
+         RowBox[{"[", 
+          RowBox[{"i", "+", "1"}], "]"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "0", ",", "numDeboor"}], "}"}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"BSpline", " ", "plot"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"cplotSet1", "=", 
+     RowBox[{"ParametricPlot3D", "[", 
+      RowBox[{
+       RowBox[{"curve", "[", 
+        RowBox[{
+        "t", ",", " ", "n", ",", " ", "knotVector1", ",", " ", 
+         "deboorPointsSet1", ",", " ", "deboorCountSet1Dec"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", 
+         RowBox[{"knotVector1", "[", 
+          RowBox[{"[", 
+           RowBox[{"n", "+", "1"}], "]"}], "]"}], ",", 
+         RowBox[{"knotVector1", "[", 
+          RowBox[{"[", 
+           RowBox[{"knotLength1", "-", "n"}], "]"}], "]"}]}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"Thick", ",", "Green"}], "}"}]}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Deboor", " ", 
+     RowBox[{"Point", "/", "Polygon"}], " ", 
+     RowBox[{"Plots", ":"}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"pointsSet1", "=", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Black", ",", 
+        RowBox[{"PointSize", "[", "0.015", "]"}], ",", 
+        RowBox[{"Point", "[", "deboorPointsSet1", "]"}], ",", 
+        RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+        RowBox[{"Point", "[", 
+         RowBox[{"deboorPointsSet1", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorPlotSet1", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", " ", 
+        RowBox[{"Line", "[", "deboorPointsSet1", "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Setup", " ", "for", " ", "affine", " ", "transformations", " ", "and", 
+     " ", 
+     RowBox[{"tubes", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"transformSet1", "=", 
+     RowBox[{"AffineTransform", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"IdentityMatrix", "[", "3", "]"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", " ", "0", ",", " ", "2.25"}], "}"}]}], "}"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube1Set1", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"curve", "[", 
+        RowBox[{
+        "t", ",", " ", "n", ",", " ", "knotVector1", ",", " ", 
+         "deboorPointsSet1", ",", " ", "deboorCountSet1Dec"}], "]"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", " ", "0", ",", " ", "1", ",", " ", "0.009"}], 
+        "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube2Set1", " ", "=", " ", 
+     RowBox[{"transformSet1", "[", "tube1Set1", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube3Set1", " ", "=", " ", 
+     RowBox[{"transformSet1", "[", "tube2Set1", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot1Set1", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Red", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube1Set1", ",", " ", "0.15"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot2Set1", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Green", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube2Set1", ",", " ", "0.15"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot3Set1", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube3Set1", ",", " ", "0.15"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Show", " ", "it", " ", 
+     RowBox[{"all", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Degree: \>\"", ",", " ", "n"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of de Boor points: \>\"", ",", " ", "deboorCountSet1"}], 
+     "]"}], ";"}], " ", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of Knots: \>\"", ",", " ", "kSet1", ",", " ", "\"\< (\>\"", 
+      ",", " ", 
+      RowBox[{"kSet1", " ", "+", " ", "2"}], ",", " ", 
+      "\"\< for extra Mathematica end point knots)\>\""}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Knot Vector: \>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "knotVector1", "]"}]}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of Polynomial Curve Segments: \>\"", ",", " ", "llSet1"}], 
+     "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "cplotSet1", ",", " ", "pointsSet1", ",", " ", "deboorPlotSet1"}], 
+      "}"}], ",", " ", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", " ", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], "\[IndentingNewLine]", 
+   
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "tubePlot1Set1", ",", " ", "tubePlot2Set1", ",", " ", "tubePlot3Set1"}],
+       "}"}], ",", "  ", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", " ", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.81455098014128*^9, 3.8145510915114193`*^9}, {
+   3.8145511320060997`*^9, 3.814551177512929*^9}, {3.814551271848003*^9, 
+   3.8145512807112207`*^9}, {3.8145513353539*^9, 3.814551363062306*^9}, {
+   3.814551402872383*^9, 3.814551466454155*^9}, {3.81455159044063*^9, 
+   3.814551600151169*^9}, {3.814551645417027*^9, 3.8145516956546383`*^9}, {
+   3.814552037255478*^9, 3.814552038790759*^9}, {3.8145521535439672`*^9, 
+   3.814552154393507*^9}, 3.814559914096937*^9, {3.814559947599121*^9, 
+   3.814559957104177*^9}, {3.814560298082634*^9, 3.8145604595679903`*^9}, {
+   3.814560587873045*^9, 3.814560644018441*^9}, {3.8145609581764317`*^9, 
+   3.814560960927897*^9}, {3.8145615547584763`*^9, 3.814561562799115*^9}, {
+   3.814561617920282*^9, 3.814561650878948*^9}, {3.8145617141115932`*^9, 
+   3.8145617933916492`*^9}, {3.814561838239853*^9, 3.814561925487558*^9}, 
+   3.814561981743114*^9, {3.814562019215458*^9, 3.8145622563835697`*^9}, {
+   3.814562292784634*^9, 3.814562334943143*^9}, {3.814562381441777*^9, 
+   3.814562382512095*^9}, {3.814562492174122*^9, 3.814562510671743*^9}, {
+   3.814562576783393*^9, 3.814562586576857*^9}, {3.8145626614881983`*^9, 
+   3.814562776590844*^9}, {3.814562930305674*^9, 3.8145629769750967`*^9}, {
+   3.81456302244807*^9, 3.814563031630046*^9}, {3.8145630685278587`*^9, 
+   3.814563077423497*^9}, {3.814563129920867*^9, 3.814563135039433*^9}, {
+   3.8145634378080263`*^9, 3.8145634539352818`*^9}, {3.814563497007477*^9, 
+   3.814563497951186*^9}, {3.8145635639515057`*^9, 3.814563619170225*^9}, {
+   3.8145636542711267`*^9, 3.814563933131462*^9}, {3.814563984414625*^9, 
+   3.8145640139858637`*^9}, {3.81456458559986*^9, 3.814564586478471*^9}, {
+   3.8145646696159477`*^9, 3.8145650136491623`*^9}, {3.8145650643505287`*^9, 
+   3.8145651398222933`*^9}, {3.8145651984154997`*^9, 3.814565324318742*^9}, {
+   3.814565489966465*^9, 3.814565552990159*^9}, {3.81456558556656*^9, 
+   3.814565621874984*^9}, {3.814565675501008*^9, 3.8145657476759977`*^9}, {
+   3.814567097244534*^9, 3.814567142060977*^9}, {3.8145671766369667`*^9, 
+   3.814567297372225*^9}, {3.814569573229075*^9, 3.814569592443617*^9}, {
+   3.8145696297580223`*^9, 3.8145696309711733`*^9}, {3.8145699540439262`*^9, 
+   3.8145700491820908`*^9}, {3.814570129740211*^9, 3.8145701637386293`*^9}, {
+   3.814570202761759*^9, 3.8145705679627657`*^9}, {3.814570612494939*^9, 
+   3.814570652874691*^9}, {3.8145707403793097`*^9, 3.814570816651814*^9}, {
+   3.814570847084704*^9, 3.81457106503412*^9}, {3.814571151549262*^9, 
+   3.8145712321698837`*^9}, {3.814571324145029*^9, 3.814571335674224*^9}, {
+   3.814571408491805*^9, 3.814571410601404*^9}, {3.8145714656108313`*^9, 
+   3.814571471417015*^9}, {3.814571543051404*^9, 3.8145715939620953`*^9}, {
+   3.8145716249393806`*^9, 3.814571697963779*^9}, {3.8145717812904663`*^9, 
+   3.8145717834504137`*^9}, {3.8145718153227987`*^9, 
+   3.8145718516401033`*^9}, {3.814571933706133*^9, 3.814572042972437*^9}, {
+   3.814572082362011*^9, 3.8145720974626102`*^9}, {3.8145721378825703`*^9, 
+   3.814572181849098*^9}, {3.814572231433269*^9, 3.814572262952546*^9}, {
+   3.81457233412219*^9, 3.8145724102170477`*^9}, {3.8146454236384907`*^9, 
+   3.814645424502839*^9}, {3.814645461796318*^9, 3.814645517520091*^9}, {
+   3.8146456719711857`*^9, 
+   3.814645672994688*^9}},ExpressionUUID->"2b2c56b7-a7fb-4faa-abd6-\
+eb84bf40d25c"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Set", " ", "#2"}], ":", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"C", "^", "1"}], " ", "Cubic", " ", "B"}], "-", "splines"}]}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"kSet2", " ", "=", " ", "18"}], ";"}], 
+   RowBox[{"(*", 
+    RowBox[{"Number", " ", "of", " ", "knots"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"llSet2", " ", "=", " ", "7"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Number", " ", "of", " ", "line", " ", "segments"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorCountSet2", " ", "=", " ", 
+     RowBox[{"kSet2", " ", "-", " ", "n", " ", "+", " ", "1"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorCountSet2Dec", " ", "=", " ", 
+     RowBox[{"deboorCountSet2", " ", "-", " ", "1"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorPointsSet2", " ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "1", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2.5", ",", " ", "2", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", " ", "2.75", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"0.5", ",", " ", "2", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "1", ",", " ", "0.5"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2.5", ",", " ", "2", ",", " ", "0.5"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "3.5", ",", " ", "0.75"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "2.5"}], ",", " ", "2", ",", " ", "0.75"}], "}"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "1"}], ",", " ", "1", ",", " ", "0.5"}], "}"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "0.5"}], ",", " ", "2", ",", " ", "0"}], "}"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "1.5"}], ",", " ", "2.75", ",", " ", "0.0"}], "}"}], 
+       ",", " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "2"}], ",", " ", "2", ",", " ", "0"}], "}"}], ",", " ", 
+       
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "1.5"}], ",", " ", "1", ",", " ", "0"}], "}"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "1"}], ",", " ", "0.5", ",", " ", "0"}], "}"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Uniform", " ", "Knots"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"knotVector2", "=", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{"0", ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", "n"}], "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Floor", "[", "i", "]"}], "/", "llSet2"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"llSet2", " ", "-", " ", "0.5"}], ",", " ", "0.5"}], 
+           "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", "n"}], "}"}]}], "]"}]}], "]"}], "//", 
+      "N"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"knotLength2", " ", "=", " ", 
+     RowBox[{"Length", "[", "knotVector2", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"BSpline", " ", "plot"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"cplotSet2", "=", 
+     RowBox[{"ParametricPlot3D", "[", 
+      RowBox[{
+       RowBox[{"curve", "[", 
+        RowBox[{
+        "t", ",", " ", "n", ",", " ", "knotVector2", ",", " ", 
+         "deboorPointsSet2", ",", " ", "deboorCountSet2Dec"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", 
+         RowBox[{"knotVector2", "[", 
+          RowBox[{"[", 
+           RowBox[{"n", "+", "1"}], "]"}], "]"}], ",", 
+         RowBox[{"knotVector2", "[", 
+          RowBox[{"[", 
+           RowBox[{"knotLength2", "-", "n"}], "]"}], "]"}]}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"Thick", ",", "Green"}], "}"}]}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Deboor", " ", 
+     RowBox[{"Point", "/", "Polygon"}], " ", 
+     RowBox[{"Plots", ":"}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"pointsSet2", "=", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Black", ",", 
+        RowBox[{"PointSize", "[", "0.015", "]"}], ",", 
+        RowBox[{"Point", "[", "deboorPointsSet2", "]"}], ",", 
+        RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+        RowBox[{"Point", "[", 
+         RowBox[{"deboorPointsSet2", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorPlotSet2", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", " ", 
+        RowBox[{"Line", "[", "deboorPointsSet2", "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Setup", " ", "for", " ", "affine", " ", "transformations", " ", "and", 
+     " ", 
+     RowBox[{"tubes", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"transformSet2", "=", 
+     RowBox[{"AffineTransform", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"IdentityMatrix", "[", "3", "]"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", " ", "0", ",", " ", "0"}], "}"}]}], "}"}], "]"}]}],
+     ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"transformSet2Y", "=", 
+     RowBox[{"AffineTransform", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"IdentityMatrix", "[", "3", "]"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", " ", "0", ",", " ", "4"}], "}"}]}], "}"}], "]"}]}],
+     ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"transformSet2Rotate", " ", "=", " ", 
+     RowBox[{"AffineTransform", "[", 
+      RowBox[{"RotationMatrix", "[", 
+       RowBox[{"180", ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"transformSet2RotateX", " ", "=", " ", 
+     RowBox[{"AffineTransform", "[", 
+      RowBox[{"RotationMatrix", "[", 
+       RowBox[{
+        RowBox[{"-", "200"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0"}], "}"}]}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"transformSet2MoveThirdPiece", " ", "=", " ", 
+     RowBox[{"AffineTransform", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"IdentityMatrix", "[", "3", "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"-", "1.5"}], ",", " ", "5", ",", " ", 
+          RowBox[{"-", "1"}]}], "}"}]}], "}"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube1Set2", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"curve", "[", 
+        RowBox[{
+        "t", ",", " ", "n", ",", " ", "knotVector2", ",", " ", 
+         "deboorPointsSet2", ",", " ", "deboorCountSet2Dec"}], "]"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", " ", "0", ",", " ", "1", ",", " ", "0.009"}], 
+        "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube2Set2", " ", "=", " ", 
+     RowBox[{"transformSet2", "[", "tube1Set2", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube2Set2", " ", "=", " ", 
+     RowBox[{"transformSet2Rotate", "[", "tube2Set2", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube3Set2", " ", "=", " ", 
+     RowBox[{"transformSet2Y", "[", "tube1Set2", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube3Set2", " ", "=", " ", 
+     RowBox[{"transformSet2RotateX", "[", "tube3Set2", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube3Set2", " ", "=", " ", 
+     RowBox[{"transformSet2MoveThirdPiece", "[", "tube3Set2", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot1Set2", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Red", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube1Set2", ",", " ", "0.15"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot2Set2", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Green", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube2Set2", ",", " ", "0.15"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot3Set2", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube3Set2", ",", " ", "0.15"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Show", " ", "it", " ", 
+     RowBox[{"all", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Degree: \>\"", ",", " ", "n"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of de Boor points: \>\"", ",", " ", "deboorCountSet2"}], 
+     "]"}], ";"}], " ", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of Knots: \>\"", ",", " ", "kSet2", ",", " ", "\"\< (\>\"", 
+      ",", " ", 
+      RowBox[{"kSet2", " ", "+", " ", "2"}], ",", " ", 
+      "\"\< for extra Mathematica end point knots)\>\""}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Knot Vector: \>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "knotVector2", "]"}]}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of Polynomial Curve Segments: \>\"", ",", " ", "llSet2"}], 
+     "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "cplotSet2", ",", " ", "pointsSet2", ",", " ", "deboorPlotSet2"}], 
+      "}"}], ",", " ", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", " ", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], "\[IndentingNewLine]", 
+   
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "tubePlot1Set2", ",", " ", "tubePlot2Set2", ",", " ", "tubePlot3Set2"}],
+       "}"}], ",", "  ", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", " ", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{
+  3.814571491995557*^9, {3.814572313978044*^9, 3.814572328728058*^9}, {
+   3.8145724387123747`*^9, 3.814572445895611*^9}, {3.814573257064209*^9, 
+   3.814573382710237*^9}, {3.8145734520383463`*^9, 3.8145734559913273`*^9}, {
+   3.814573491047462*^9, 3.8145735617518873`*^9}, {3.814573718039062*^9, 
+   3.814573730919067*^9}, {3.814573776775321*^9, 3.814574135847307*^9}, {
+   3.814574218551078*^9, 3.814574332661756*^9}, {3.814574379838862*^9, 
+   3.8145744303107147`*^9}, {3.814574463944175*^9, 3.814574502550489*^9}, {
+   3.814574534727758*^9, 3.814574694407035*^9}, {3.8145747269843073`*^9, 
+   3.8145747967428913`*^9}, {3.8145749435436153`*^9, 
+   3.8145749726181107`*^9}, {3.814575056664514*^9, 3.8145750568266287`*^9}, {
+   3.8145750917660933`*^9, 3.814575129094685*^9}, {3.814575163800111*^9, 
+   3.8145752647747*^9}, {3.814575315273518*^9, 3.814575316298314*^9}, {
+   3.814575456104331*^9, 3.8145754777062483`*^9}, {3.814575508039241*^9, 
+   3.814575530762727*^9}, {3.814575583688693*^9, 3.81457568584697*^9}, {
+   3.814575716136141*^9, 3.81457580078911*^9}, {3.81457588581689*^9, 
+   3.814576069894576*^9}, {3.814576123543789*^9, 3.814576132484158*^9}, {
+   3.814576168503406*^9, 3.8145762846498003`*^9}, 3.814576364583827*^9, 
+   3.814576408663796*^9, {3.814576444839604*^9, 3.814576483145816*^9}, {
+   3.814576692407083*^9, 3.814576692518063*^9}, {3.814576728393154*^9, 
+   3.8145767377654877`*^9}, {3.8145769061193132`*^9, 3.814576910502429*^9}, {
+   3.814576951479251*^9, 3.81457707694788*^9}, {3.814577145735861*^9, 
+   3.8145771969216013`*^9}, {3.814625835733515*^9, 3.814625893997493*^9}, {
+   3.8146259399668016`*^9, 3.81462599071761*^9}, 3.814626056912698*^9, {
+   3.814626116702384*^9, 3.8146261991975822`*^9}, {3.814626239292687*^9, 
+   3.814626263229412*^9}, {3.814626304222921*^9, 3.814626385293502*^9}, {
+   3.814626427694643*^9, 3.814626538941431*^9}, {3.814626608015337*^9, 
+   3.814626720685865*^9}, {3.814626752238228*^9, 3.814626806557152*^9}, {
+   3.814626837891314*^9, 3.814626997852972*^9}, {3.814627039694562*^9, 
+   3.814627286509038*^9}, {3.8146273605249166`*^9, 3.814627476670487*^9}, {
+   3.814645543370677*^9, 3.814645555570352*^9}, {3.814645624660033*^9, 
+   3.814645625941979*^9}},
+ CellLabel->
+  "In[2611]:=",ExpressionUUID->"33f9ec1a-dac0-45d1-9fce-25a3292f4907"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Set", " ", "#3"}], ":", " ", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"C", "^", "0"}], " ", "Cubic", " ", "B"}], "-", "splines"}]}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"kSet3", " ", "=", " ", "24"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{"Number", " ", "of", " ", "knots"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"llSet3", " ", "=", " ", "7"}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{"Number", " ", "of", " ", "line", " ", "segments"}], "*)"}], 
+    "\[IndentingNewLine]", 
+    RowBox[{"deboorCountSet3", " ", "=", " ", 
+     RowBox[{"kSet3", " ", "-", " ", "n", " ", "+", " ", "1"}]}], ";", " ", 
+    RowBox[{"(*", 
+     RowBox[{
+     "Number", " ", "of", " ", "de", " ", "Boor", " ", "points", " ", 
+      "needed"}], "*)"}], "\[IndentingNewLine]", 
+    RowBox[{"deboorCountSet3Dec", " ", "=", " ", 
+     RowBox[{"deboorCountSet3", " ", "-", " ", "1"}]}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Decremented", " ", "de", " ", "Boor", " ", "count", " ", "for", " ", 
+     "looping", " ", "purposes"}], "*)"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorPointsSet3", "  ", "=", " ", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "0", ",", " ", 
+         RowBox[{"-", "4"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "2", ",", " ", 
+         RowBox[{"-", "5"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "4", ",", " ", 
+         RowBox[{"-", "5.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "5", ",", " ", 
+         RowBox[{"-", "5.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "7", ",", " ", 
+         RowBox[{"-", "5.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "2"}], ",", " ", "7", ",", " ", 
+         RowBox[{"-", "5.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "2.5"}], ",", "  ", "5", ",", " ", 
+         RowBox[{"-", "4.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"-", "0.5"}], ",", " ", "1.75", ",", " ", 
+         RowBox[{"-", "2.25"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", "  ", "0.5", ",", " ", 
+         RowBox[{"-", "2.25"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"4.5", ",", " ", "0.5", ",", " ", 
+         RowBox[{"-", "2.25"}]}], "}"}], " ", ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"6.5", ",", " ", "2.25", ",", " ", 
+         RowBox[{"-", "5.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"6.75", ",", " ", "5", ",", " ", 
+         RowBox[{"-", "6"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"6.75", ",", " ", "7", ",", " ", 
+         RowBox[{"-", "5.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2.75", ",", " ", "7", ",", " ", 
+         RowBox[{"-", "5.5"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2.75", ",", " ", "5", ",", " ", 
+         RowBox[{"-", "4"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"2.75", ",", " ", "2", ",", " ", 
+         RowBox[{"-", "2"}]}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2.75", ",", " ", "2.25", ",", " ", "1.65"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"6.5", ",", " ", "1", ",", " ", "1"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"4.5", ",", " ", 
+         RowBox[{"-", "1"}], ",", " ", "0.5"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2.5", ",", " ", 
+         RowBox[{"-", "1"}], ",", " ", "0.25"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], 
+      "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Uniform", " ", "Knots"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"knotVector3", "=", 
+     RowBox[{
+      RowBox[{"Join", "[", 
+       RowBox[{
+        RowBox[{"Table", "[", 
+         RowBox[{"0", ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", "n"}], "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Floor", "[", "i", "]"}], "/", "llSet3"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1.33", ",", "llSet3", " ", ",", " ", "0.33"}], 
+           "}"}]}], "]"}], ",", 
+        RowBox[{"Table", "[", 
+         RowBox[{"1", ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "0", ",", "n"}], "}"}]}], "]"}]}], "]"}], "//", 
+      "N"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"knotLength3", " ", "=", " ", 
+     RowBox[{"Length", "[", "knotVector3", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"BSpline", " ", "plot"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"cplotSet3", "=", 
+     RowBox[{"ParametricPlot3D", "[", 
+      RowBox[{
+       RowBox[{"curve", "[", 
+        RowBox[{
+        "t", ",", " ", "n", ",", " ", "knotVector3", ",", " ", 
+         "deboorPointsSet3", ",", " ", "deboorCountSet3Dec"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", 
+         RowBox[{"knotVector3", "[", 
+          RowBox[{"[", 
+           RowBox[{"n", "+", "1"}], "]"}], "]"}], ",", 
+         RowBox[{"knotVector3", "[", 
+          RowBox[{"[", 
+           RowBox[{"knotLength3", "-", "n"}], "]"}], "]"}]}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{"Thick", ",", "Green"}], "}"}]}]}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Deboor", " ", 
+     RowBox[{"Point", "/", "Polygon"}], " ", 
+     RowBox[{"Plots", ":"}]}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"pointsSet3", "=", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Black", ",", 
+        RowBox[{"PointSize", "[", "0.015", "]"}], ",", 
+        RowBox[{"Point", "[", "deboorPointsSet3", "]"}], ",", 
+        RowBox[{"PointSize", "[", "0.02", "]"}], ",", 
+        RowBox[{"Point", "[", 
+         RowBox[{"deboorPointsSet3", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"deboorPlotSet3", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", " ", 
+        RowBox[{"Line", "[", "deboorPointsSet3", "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Setup", " ", "for", " ", "affine", " ", "transformations", " ", "and", 
+     " ", 
+     RowBox[{"tubes", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"transformSet3", "=", 
+     RowBox[{"AffineTransform", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"IdentityMatrix", "[", "3", "]"}], ",", " ", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", " ", "0", ",", " ", "3.75"}], "}"}]}], "}"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube1Set3", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"curve", "[", 
+        RowBox[{
+        "t", ",", " ", "n", ",", " ", "knotVector3", ",", " ", 
+         "deboorPointsSet3", ",", " ", "deboorCountSet3Dec"}], "]"}], ",", 
+       " ", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", " ", "0", ",", " ", "1", ",", " ", "0.009"}], 
+        "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube2Set3", " ", "=", " ", 
+     RowBox[{"transformSet3", "[", "tube1Set3", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tube3Set3", " ", "=", " ", 
+     RowBox[{"transformSet3", "[", "tube2Set3", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot1Set3", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Red", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube1Set3", ",", " ", "0.28"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot2Set3", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Green", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube2Set3", ",", " ", "0.28"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tubePlot3Set3", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{"Blue", ",", " ", 
+        RowBox[{"Tube", "[", 
+         RowBox[{"tube3Set3", ",", " ", "0.28"}], "]"}]}], "}"}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"Show", " ", "it", " ", 
+     RowBox[{"all", ":"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Degree: \>\"", ",", " ", "n"}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of de Boor points: \>\"", ",", " ", "deboorCountSet3"}], 
+     "]"}], ";"}], " ", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of Knots: \>\"", ",", " ", "kSet3", ",", " ", "\"\< (\>\"", 
+      ",", " ", 
+      RowBox[{"kSet3", " ", "+", " ", "2"}], ",", " ", 
+      "\"\< for extra Mathematica end point knots)\>\""}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<Knot Vector: \>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "knotVector3", "]"}]}], "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Number of Polynomial Curve Segments: \>\"", ",", " ", "llSet3"}], 
+     "]"}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "cplotSet3", ",", " ", "pointsSet3", ",", " ", "deboorPlotSet3"}], 
+      "}"}], ",", " ", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", " ", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}], "\[IndentingNewLine]", 
+   
+   RowBox[{"Show", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "tubePlot1Set3", ",", " ", "tubePlot2Set3", ",", " ", "tubePlot3Set3"}],
+       "}"}], ",", "  ", 
+     RowBox[{"AspectRatio", "\[Rule]", "Automatic"}], ",", " ", 
+     RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJxTTMoPSmViYGAQAWIQ7fPusNTl7DeOwivPyILompSFlbeAtGmNai+IjpJ7
+vRVE/35hsQ1Ez5Bi2gWiVWQa9oDoBYW9B0B04Yn2EyBaVLbhPIjuyzr7FUTb
+r9b9BaJ3+M1Tug2k5aYsVwfRL2JO64PoObEmZiD6StAWVxBdq7zSB0T/ebMd
+TE/9XxEKok88XgSm37T/igbRJUuvJYPoO9zWGSCa6+CmPBC9xGJtCYh+8l24
+AURvKV/SBaIvMfyZCrav02ouiM6xnroUzHd7vxJEX/5xfgOIZmiqPASiF3Hs
+OAeiTY4duQSiuzayXAbRIUWsr8DiB9jegWgA9gu3yQ==
+  "],
+ CellLabel->
+  "In[2590]:=",ExpressionUUID->"b7ca04a0-7529-4675-86a3-5511c41f75b5"],
+
+Cell[BoxData[""], "Input",ExpressionUUID->"0fedf43b-4914-4592-a41f-0ae066ab4c7c"]
+},
+WindowSize->{1703, 1138},
+WindowMargins->{{1773, Automatic}, {Automatic, -37}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"12.1 for Mac OS X x86 (64-bit) (June 19, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"b292d5ba-7663-4347-ab82-d9628ea7224b"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 270, 9, 157, "Text",ExpressionUUID->"81fc5d7e-46bf-4a38-bf2d-bd66dc51866c"],
+Cell[831, 31, 13632, 321, 1473, "Input",ExpressionUUID->"2b2c56b7-a7fb-4faa-abd6-eb84bf40d25c"],
+Cell[14466, 354, 13706, 340, 1566, "Input",ExpressionUUID->"33f9ec1a-dac0-45d1-9fce-25a3292f4907"],
+Cell[28175, 696, 11121, 288, 1318, "Input",ExpressionUUID->"b7ca04a0-7529-4675-86a3-5511c41f75b5"],
+Cell[39299, 986, 81, 0, 46, "Input",ExpressionUUID->"0fedf43b-4914-4592-a41f-0ae066ab4c7c"]
+}
+]
+*)
+
